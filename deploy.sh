@@ -1,6 +1,8 @@
 #!/bin/bash
 
-dirname $0 /deploy_functions.sh
+DIR=`dirname $0`
+
+$DIR/deploy_functions.sh
 
 # Environment array which maps to the folders
 declare -A environment
