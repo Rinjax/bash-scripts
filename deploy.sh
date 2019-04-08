@@ -1,8 +1,8 @@
 #!/bin/bash
 
-DIR=`dirname $0`
+#DIR=`dirname $0`
 
-. $DIR/deploy_functions.sh
+#. $DIR/deploy_functions.sh
 
 # Environment array which maps to the folders
 declare -A environment
@@ -22,6 +22,9 @@ migrate=
 # Should the script restart the queue worker process
 queue=
 
+# Name of the queue to restart - should be the same as the alias/environment key
+queuename=
+
 # Should the script run the composer install
 composer=
 
@@ -36,6 +39,7 @@ do
     if [ -v environment["$arg"] ]
     then
         path=${environment[$arg]}
+        queuename="$arg"
     fi
 
     if [ "$arg" == "-q" ] || [ "$arg" == "--queue-worker" ]
@@ -68,15 +72,20 @@ git pull
 php $path/artisan migrate --force
 
 # Restart the queue worker if told to
-if [ "$queue" == 1 ]
+if [ -n "$queuename" ] && [ "$queue" == 1 ]
 then
-    restart_queue_worker
+    supervisorctl restart queue_"$queuename"
+fi
+
+if [ ! -n "$queuename" ] && [ "$queue" == 1 ]
+then
+    echo "Flag detected to restart the queue worker, but environment alias was found"
 fi
 
 # Run the composer install if told to
 if [ "$composer" == 1 ]
 then
-    composer_install
+    composer install
 fi
 
 echo "finished - have a nice day :)"
