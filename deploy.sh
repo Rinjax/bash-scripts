@@ -2,7 +2,7 @@
 
 DIR=`dirname $0`
 
-$DIR/deploy_functions.sh
+. $DIR/deploy_functions.sh
 
 # Environment array which maps to the folders
 declare -A environment
