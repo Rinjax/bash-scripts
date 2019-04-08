@@ -58,7 +58,7 @@ done
 # Start the process
 echo "Deploying to $path"
 
-echo $DIR
+echo $DIR/deploy_functions.sh
 
 # switch to the correct directory
 cd $path
