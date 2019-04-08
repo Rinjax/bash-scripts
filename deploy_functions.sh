@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-restart_queue_worker () {
+function restart_queue_worker () {
     PIDID=$(ps -A -o pid,cmd|grep queue:work|head -n 1| awk '{print $1}')
 
     if [ -n $PIDID ]
@@ -15,6 +15,7 @@ restart_queue_worker () {
 
 }
 
-composer_install () {
+function composer_install () {
+echo "composer function"
     composer install
 }

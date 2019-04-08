@@ -67,7 +67,7 @@ cd $path
 git pull
 
 # Run the artisan migration process (always run)
-php art migrate --force
+art migrate --force
 
 # Restart the queue worker if told to
 if [ $queue == 1 ]
