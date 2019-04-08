@@ -70,13 +70,13 @@ git pull
 php $path/artisan migrate --force
 
 # Restart the queue worker if told to
-if [ $queue == 1 ]
+if [ "$queue" == 1 ]
 then
     restart_queue_worker
 fi
 
 # Run the composer install if told to
-if [ $composer == 1 ]
+if [ "$composer" == 1 ]
 then
     composer_install
 fi
