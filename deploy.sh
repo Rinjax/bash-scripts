@@ -58,6 +58,8 @@ done
 # Start the process
 echo "Deploying to $path"
 
+echo $DIR
+
 # switch to the correct directory
 cd $path
 
