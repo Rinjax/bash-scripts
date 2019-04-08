@@ -16,6 +16,5 @@ function restart_queue_worker () {
 }
 
 function composer_install () {
-echo "composer function"
     composer install
 }
