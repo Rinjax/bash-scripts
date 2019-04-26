@@ -79,13 +79,19 @@ fi
 
 if [ ! -n "$queuename" ] && [ "$queue" == 1 ]
 then
-    echo "Flag detected to restart the queue worker, but environment alias was found"
+    echo "Flag detected to restart the queue worker, but environment alias was not found"
 fi
 
 # Run the composer install if told to
 if [ "$composer" == 1 ]
 then
     composer install
+fi
+
+# Clear the laravel cache if told to
+if [ "$cache" == 1 ]
+then
+    php $path/artisan cache:clear
 fi
 
 echo "finished - have a nice day :)"
