@@ -31,6 +31,9 @@ composer=
 # Should the script clear caches
 cache=
 
+# Should the script deploy to all Laravel instances
+all=
+
 
 # Cycle through the arguments and resolve them, and set as needed
 for arg in "$@"
@@ -55,6 +58,11 @@ do
     if [ "$arg" == "-cc" ] || [ "$arg" == "--cache-clear" ]
     then
         cache=1
+    fi
+
+    if [ "$arg" == "-a" ] || [ "$arg" == "--all" ]
+    then
+        all=1
     fi
 
 done
