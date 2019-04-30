@@ -1,16 +1,31 @@
 #!/bin/bash
 
-#DIR=`dirname $0`
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m'
 
-#. $DIR/deploy_functions.sh
+#DIR=`dirname $0`
 
 # Environment array which maps to the folders
 declare -A environment
 
+environment[global4]=/var/www/_global
+
+environment[access]=/var/www/portal_access
 environment[admin]=/var/www/portal_admin
 environment[affinity]=/var/www/portal_affinity
-environment[global4]=/var/www/_global
+environment[affinitystats]=/var/www/portal_affinity_statistics
+environment[billing]=/var/www/portal_billing
+environment[cdr]=/var/www/portal_cdr
+environment[elevate]=/var/www/portal_elevate
+environment[marketing]=/var/www/portal_marketing
+environment[payment]=/var/www/portal_payment
+environment[portal]=/var/www/portal_portal
 environment[recon]=/var/www/portal_recon
+environment[statistics]=/var/www/portal_statistics
+environment[g4cms]=/var/www/portal_webcms_g4
+environment[wbwebsite]=/var/www/website_weekly_broadband
+
 
 # Path which the script will run against. Default is the current working directory, change to the environment array values
 # if the parameter has been used
@@ -69,7 +84,7 @@ done
 
 if [ "$all" == 1 ]
 then
-    for d in /var/www/*/ ; do
+    for d in "${environment[@]}" ; do
         {
             printf "Deploying to $d\n"
             cd $d
@@ -81,9 +96,9 @@ then
             php artisan migrate --force
             printf "Clearing Cache\n"
             php artisan cache:clear
-            printf "${GREEN}Complete\n"
+            printf "${GREEN}Complete ${NC}\n"
         } || {
-            printf "${RED}Failed to Deploy $d\n"
+            printf "${RED}Failed to Deploy $d ${NC}\n"
         }
     done
 else
