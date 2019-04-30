@@ -67,42 +67,64 @@ do
 
 done
 
-# Start the process
-echo "Deploying to $path"
-
-# switch to the correct directory
-cd $path
-
-# Git Pull the repo
-git pull
-
-# Run the artisan migration process (always run)
-php $path/artisan migrate --force
-
-# Restart the queue worker if told to
-if [ -n "$queuename" ] && [ "$queue" == 1 ]
+if [ "$all" == 1 ]
 then
-    supervisorctl restart queue_"$queuename"
-fi
+    for d in /var/www/*/ ; do
+        {
+            printf "Deploying to $d\n"
+            cd $d
+            printf " Git Pulling\n"
+            git pull
+            printf "Installing packages\n"
+            composer install
+            printf "Updating database\n"
+            php artisan migrate --force
+            printf "Clearing Cache\n"
+            php artisan cache:clear
+            printf "${GREEN}Complete\n"
+        } || {
+            printf "${RED}Failed to Deploy $d\n"
+        }
+    done
+else
 
-if [ ! -n "$queuename" ] && [ "$queue" == 1 ]
-then
-    echo "Flag detected to restart the queue worker, but environment alias was not found"
-fi
+    # Start the process
+    echo "Deploying to $path"
 
-# Run the composer install if told to
-if [ "$composer" == 1 ]
-then
-    composer install
-fi
+    # switch to the correct directory
+    cd $path
 
-# Clear the laravel cache if told to
-if [ "$cache" == 1 ]
-then
-    php $path/artisan cache:clear
-fi
+    # Git Pull the repo
+    git pull
 
-echo "finished - have a nice day :)"
+    # Run the artisan migration process (always run)
+    php $path/artisan migrate --force
+
+    # Restart the queue worker if told to
+    if [ -n "$queuename" ] && [ "$queue" == 1 ]
+    then
+        supervisorctl restart queue_"$queuename"
+    fi
+
+    if [ ! -n "$queuename" ] && [ "$queue" == 1 ]
+    then
+        echo "Flag detected to restart the queue worker, but environment alias was not found"
+    fi
+
+    # Run the composer install if told to
+    if [ "$composer" == 1 ]
+    then
+        composer install
+    fi
+
+    # Clear the laravel cache if told to
+    if [ "$cache" == 1 ]
+    then
+        php $path/artisan cache:clear
+    fi
+
+    echo "finished - have a nice day :)"
+fi
 
 
 
