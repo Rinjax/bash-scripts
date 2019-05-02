@@ -8,9 +8,9 @@ for d in /var/www/*/ ; do
     {
         printf "Clearing Cache in $d\n"
         php $d/artisan cache:clear &&
-        printf "${GREEN}Cleared\n"
+        printf "${GREEN}Cleared${NC}\n\n"
     } || {
-        printf "${RED}Failed to Clear $d\n"
+        printf "${RED}Failed to Clear $d${NC}\n\n"
     }
 
 done
