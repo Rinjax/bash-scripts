@@ -14,7 +14,7 @@ environment[global4]=/var/www/_global
 environment[access]=/var/www/portal_access
 environment[admin]=/var/www/portal_admin
 environment[affinity]=/var/www/portal_affinity
-environment[affinitystats]=/var/www/portal_affinity_statistics
+environment[affinitystatstics]=/var/www/portal_affinity_statistics
 environment[billing]=/var/www/portal_billing
 environment[cdr]=/var/www/portal_cdr
 environment[elevate]=/var/www/portal_elevate
@@ -23,8 +23,29 @@ environment[payment]=/var/www/portal_payment
 environment[portal]=/var/www/portal_portal
 environment[recon]=/var/www/portal_recon
 environment[statistics]=/var/www/portal_statistics
-environment[g4cms]=/var/www/portal_webcms_g4
+#environment[g4cms]=/var/www/portal_webcms_g4
 environment[wbwebsite]=/var/www/website_weekly_broadband
+
+
+# Environment array which maps to the folders
+declare -A workerqueues
+
+workerqueues[global4]=global
+
+workerqueues[access]=queue_portal_access
+workerqueues[admin]=queue_portal_admin
+workerqueues[affinity]=queue_portal_affinity
+workerqueues[affinitystatstics]=queue_portal_affinity_statistics
+workerqueues[billing]=queue_portal_billing
+workerqueues[cdr]=queue_portal_cdr
+workerqueues[elevate]=queue_portal_elevate
+workerqueues[marketing]=queue_portal_marketing
+workerqueues[payment]=queue_portal_payment
+workerqueues[portal]=queue_portal_portal
+workerqueues[recon]=queue_portal_recon
+workerqueues[statistics]=queue_portal_statistics
+#environment[g4cms]=/var/www/portal_webcms_g4
+workerqueues[wbwebsite]=queue_website_weekly_broadband
 
 
 # Path which the script will run against. Default is the current working directory, change to the environment array values
@@ -57,12 +78,16 @@ do
     if [ -v environment["$arg"] ]
     then
         path=${environment[$arg]}
-        queuename="$arg"
+        queuename=${workerqueue[$arg]}
     fi
 
-    if [ "$arg" == "-q" ] || [ "$arg" == "--queue-worker" ]
+    if [ "$arg" == "-q" ]
     then
         queue=1
+
+        while getopts ":q:" opt; do
+            queuename="$queuename_$OPTARG"
+        done
     fi
 
     if [ "$arg" == "-c" ] || [ "$arg" == "--composer-install" ]
@@ -118,7 +143,7 @@ else
     # Restart the queue worker if told to
     if [ -n "$queuename" ] && [ "$queue" == 1 ]
     then
-        supervisorctl restart queue_"$queuename"
+        supervisorctl restart "$queuename"
     fi
 
     if [ ! -n "$queuename" ] && [ "$queue" == 1 ]
