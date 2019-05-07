@@ -30,7 +30,7 @@ environment[wbwebsite]=/var/www/website_weekly_broadband
 # Environment array which maps to the folders
 declare -A workerqueues
 
-workerqueues[global4]=global
+workerqueues[global4]=queue_global
 
 workerqueues[access]=queue_portal_access
 workerqueues[admin]=queue_portal_admin
