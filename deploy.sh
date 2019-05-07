@@ -78,7 +78,7 @@ do
     if [ -v environment["$arg"] ]
     then
         path=${environment[$arg]}
-        queuename=${workerqueue[$arg]}
+        queuename=${workerqueues[$arg]}
     fi
 
     if [ "$arg" == "-q" ]
