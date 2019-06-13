@@ -25,6 +25,7 @@ environment[recon]=/var/www/portal_recon
 environment[statistics]=/var/www/portal_statistics
 #environment[g4cms]=/var/www/portal_webcms_g4
 environment[wbwebsite]=/var/www/website_weekly_broadband
+environment[pbwebsite]=/var/www/website_perfect_broadband
 
 
 # Environment array which maps to the folders
@@ -46,6 +47,7 @@ workerqueues[recon]=queue_portal_recon
 workerqueues[statistics]=queue_portal_statistics
 #environment[g4cms]=/var/www/portal_webcms_g4
 workerqueues[wbwebsite]=queue_website_weekly_broadband
+workerqueues[pbwebsite]=queue_website_perfect_broadband
 
 
 # Path which the script will run against. Default is the current working directory, change to the environment array values
